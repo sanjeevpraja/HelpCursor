@@ -62,6 +62,9 @@ gulp.task('less', function () {
 // Lint Task
 gulp.task('lint', function() {
   return gulp.src('build/js/*.js')
+  .pipe(plumber({
+    errorHandler: onError
+  }))
   .pipe(jshint())
   .pipe(jshint.reporter('default'));
 });
@@ -71,6 +74,9 @@ gulp.task('lint', function() {
 gulp.task('scripts', function() {
   return gulp.src('build/js/*.js')
        // .pipe(concat('all.js'))
+        .pipe(plumber({
+          errorHandler: onError
+        }))
         .pipe(uglify())
         .pipe(rename({
           suffix: "-min",
@@ -82,6 +88,9 @@ gulp.task('scripts', function() {
 //Image Optimize
 gulp.task('images', function() {
   return gulp.src('build/img/**/*')
+  .pipe(plumber({
+    errorHandler: onError
+  }))
   .pipe(imagemin({
     progressive: true,
     interlaced: true,
@@ -93,9 +102,9 @@ gulp.task('images', function() {
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    // browserSync.init({
-    //     server: "./app/"
-    // });
+    browserSync.init({
+      server: "./app/"
+    });
 gulp.watch('build/kit/**/*', ['kit']);
 gulp.watch('build/img/**/*', ['images']);
 gulp.watch('build/js/*.js', ['lint', 'scripts']);
